@@ -20,7 +20,7 @@ const createCartProduct=async function (request,response,next) {
 
         }catch (e) {
              next(e.message);
-             throw new Error(e);
+            console.log(e);
         }
     }else {
         response.status(401).json(errors);
@@ -37,7 +37,7 @@ const getCartProducts=async function (request,response,next) {
             }
         }catch (e) {
             next(e._message);
-            throw new Error(e);
+           console.log(e);
         }
 };
 const getCartProductsByUserId=async function (request,response,next) {
@@ -54,7 +54,7 @@ const getCartProductsByUserId=async function (request,response,next) {
                }
            }catch (e) {
                next(e.message);
-               throw new Error(e);
+              console.log(e);
            }
        }else {
            response.status(401).json(errors);
@@ -84,7 +84,7 @@ const getCartProductById=async function (request,response,next) {
             }
         }catch (e) {
             next(e.message);
-            throw new Error(e);
+           console.log(e);
         }
 
     }else {
@@ -105,7 +105,7 @@ const deleteCartProductById=async function (request,response,next) {
             }
         }catch (e) {
             next(e.message);
-            throw new Error(e);
+           console.log(e);
         }
 
     }else {
@@ -129,7 +129,7 @@ const updateCartProductById=async function (request,response,next) {
 
         }catch (e) {
             next(e.message);
-            throw new Error(e);
+           console.log(e);
         }
 
     }else {

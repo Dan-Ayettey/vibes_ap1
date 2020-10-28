@@ -80,7 +80,7 @@ if(errors.isEmpty()) {
                      request.body.customer=customer;
                 } ).then((customer)=>{return customer;}).
                 catch((err) => {
-                    throw new Error(err);
+                   console.log(err);
                 });
                 const customerData=request.body.customer;
                 request.body._customer_id=request.body.customer.id;
@@ -108,7 +108,7 @@ if(errors.isEmpty()) {
 
     } catch (e) {
         next({error:e.message,msg:'might be server error'});
-        throw new Error(e.message);
+       console.log(e.message);
     }
 }else {
     response.status(400).json(errors);
@@ -162,7 +162,7 @@ const getUsers=async function (request,response,next){
         });
     }catch (e){
         next({error:e.message,msg:'might be server error'});
-        throw new Error(e.message);
+       console.log(e.message);
     }
 };
 const getUserById=async function (request,response,next){
@@ -179,7 +179,7 @@ const getUserById=async function (request,response,next){
             }
         } catch (e) {
             next({error:e.message,msg:'might be server error'});
-            throw new Error(e.message);
+           console.log(e.message);
         }
     }else {
         response.status(400).json(errors);
@@ -207,7 +207,7 @@ const deactivateUserById= async function (request,response,next){
 
         } catch (e) {
             next({error:e._message,msg:'might be server error'});
-            throw new Error(e.message);
+           console.log(e.message);
         }
     }else {
         response.status(400).json(errors);
@@ -227,7 +227,7 @@ const deleteUserById= async function (request,response,next){
             }
         } catch (e) {
             next({error:e._message,msg:'might be server error'});
-            throw new Error(e.message);
+           console.log(e.message);
         }
     }else {
         response.status(400).json(errors);
@@ -254,7 +254,7 @@ const activateUser= async function (request,response,next){
             }
         } catch (e) {
             next({error:e.message,msg:'might be server error'});
-            throw new Error(e.message);
+           console.log(e.message);
         }
     }else {
         response.status(400).json(errors);
@@ -280,7 +280,7 @@ const updateUserById=async function (request,response,next){
             }
         } catch (e) {
             next({error:e.message,msg:'might be server error'});
-            throw new Error(e.message);
+           console.log(e.message);
         }
 
 
@@ -309,7 +309,7 @@ const renewSecretById=async function (request,response,next){
             }
         } catch (e) {
             next({error:e.message,msg:'might be server error'});
-            throw new Error(e.message);
+           console.log(e.message);
         }
 
 
@@ -339,7 +339,7 @@ const renewPasswordById=async function (request,response,next){
             }
         } catch (e) {
             next({error:e.message,msg:'might be server error'});
-            throw new Error(e.message);
+           console.log(e.message);
         }
     }else {
         response.status(400).json(errors);
@@ -364,7 +364,7 @@ const veryToken=async function (request,  response, next){
             } catch (e) {
 
                 next({error: e.name, msg: 'might be server error or '+e.message});
-                throw new Error(e.message);
+               console.log(e.message);
             }
 
         } else {

@@ -5,7 +5,7 @@ const {validationResult} = require("../configurations/schema/billingSchema");
 require('dotenv').config();
 const stripe = require('stripe')(process.env['STRIPE_KEY']);
 //Payment Constructs
-
+/*
 const getKeys=async function (request,response,next) {
   const  errors= validationResult(request);
    request.body.customer_id=request.body.customer_id ? request.params.id:request.body.customer_id;
@@ -145,7 +145,7 @@ const confirmPaymentIntent=async function (request,response,next) {
 
 
     }
-};
+};*/
 const createChargeIntent=async function (request,response,next) {
     const  errors= validationResult(request);
     const  {email,telephoneNumber}=request.body;
@@ -162,7 +162,7 @@ const createChargeIntent=async function (request,response,next) {
                 }).then((customer) => {
                     return customer;
                 }).catch((err) => {
-                    throw new Error(err);
+                   console.log(err);
                 });
                 const client=createStripeChargeIntent.create(request.body);
                 if(client){
