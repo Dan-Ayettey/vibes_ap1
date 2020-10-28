@@ -121,7 +121,7 @@ const grantAuthenticationWithAToken=async function (request){
             const isAvailable=isValidPassword(password,user.password) || telephoneNumber === user.telephoneNumber &&
                 email===user.email && user.isActive;
                 if(isAvailable){
-                    user._token= await jwt.sign(request.body, process.env.JWT_SECRET, {expiresIn: '1d'});
+                    user._token= await jwt.sign({email:user.email,password:password,id:user._id}, process.env.JWT_SECRET, {expiresIn: '1d'});
                     await user.save();
                     return {user};
                 }else if(user.email === email  && user.isActive===false){
@@ -349,9 +349,7 @@ const veryToken=async function (request,  response, next){
        const  error=validationResult(request);
     if(error.isEmpty()) {
         if (request.headers.authorization) {
-
             const accessToken = request.headers.authorization.slice(7, 1000);
-
             try {
             const very=await jwt.verify(accessToken, process.env.JWT_SECRET);
             // Check if token has expired
@@ -359,6 +357,7 @@ const veryToken=async function (request,  response, next){
                 response.status(401).json({error: "JWT token has expired, please login to obtain a new one"});
             } else {
                 const _id = very.id;
+
                 response.locals.loggedInUser = await userModel.findById({_id});
                  next();
             }
