@@ -100,10 +100,9 @@ const getCartProductsByUserId=async function (request,response,next) {
 
 };
 const getCartProductById=async function (request,response,next) {
-    const _id=request.body.cart_id ? request.body.cart_id:request.params.cid;
-    request.body.id="dfd"
+    const _id=request.body.cid ? request.body.cid:request.params.cid;
     const errors=validationResult(request);
-    console.log(request.body.id)
+
     if(errors.isEmpty()){
         try {
             const cart=await cartModel.findOne({_id});
@@ -129,7 +128,7 @@ const getCartProductById=async function (request,response,next) {
     }
 };
 const deleteCartProductById=async function (request,response,next) {
-    const _id=request.body.cart_id ? request.body.cart_id:request.params.cart_id;
+    const _id=request.body.cid ? request.body.cid:request.params.cid;
     const errors=validationResult(request);
     if(errors.isEmpty()){
         try {
@@ -150,11 +149,12 @@ const deleteCartProductById=async function (request,response,next) {
     }
 };
 const updateCartProductById=async function (request,response,next) {
-    const _id=request.body.cart_id ? request.body.cart_id:request.params.cid;
+    const _id=request.body.cid ? request.body.cid:request.params.cid;
     const errors=validationResult(request);
 
     if(errors.isEmpty()){
         try {
+            console.log(request.body)
             const cart=await cartModel.findOne({_id});
             if(cart){
             cart.items=request.body.items;

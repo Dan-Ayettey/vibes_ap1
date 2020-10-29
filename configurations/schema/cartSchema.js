@@ -49,7 +49,7 @@ const getCartByUserIdSchema=checkSchema({
         in:['body',"params"],
         isString:true,
         isEmpty:false,
-        errorMessage:'Card item must not be left empty'
+        errorMessage:'Card id must not be left empty'
 
 
     },
@@ -99,16 +99,6 @@ const updateCartSchema=checkSchema({
 
 
     },
-    cart_id:{
-        in:['body',"params"],
-        isString:true,
-        isEmpty:false,
-        errorMessage:'Cart id must not be left empty'
-
-
-    },
-
-
 
 });
 

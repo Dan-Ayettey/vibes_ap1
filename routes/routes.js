@@ -31,10 +31,10 @@ protectedRouter.put('/v1/users/:id/deactivated-account',schemaUpdate,allowIfLogg
 
 //cart routes
 router.post('/v1/carts/users/:id',createCartSchema,createCartProduct);
-protectedRouter.delete('/v1/carts/:cid/managed-carted-user/:id',getCartByIdSchema,allowIfLoggedIn,deleteCartProductById);
-protectedRouter.get('/v1/carts/:cid/carted-user/:id',getCartByIdSchema,allowIfLoggedIn,getCartProductById);
-protectedRouter.put('/v1/carts/:cid/managed-carted-user/:id',updateCartSchema,allowIfLoggedIn,updateCartProductById);
-protectedRouter.get('/v1/carts/user/:id',getCartProductsByUserIdSchema,allowIfLoggedIn,getCartProductsByUserId);
+protectedRouter.delete('/v1/carts/user-carted/:cid',getCartByIdSchema,allowIfLoggedIn,deleteCartProductById);
+protectedRouter.get('/v1/carts/user-carted/:cid',getCartByIdSchema,allowIfLoggedIn,getCartProductById);
+protectedRouter.put('/v1/carts/user-carted/:cid',updateCartSchema,allowIfLoggedIn,updateCartProductById);
+protectedRouter.get('/v1/carts/users/:id',getCartProductsByUserIdSchema,allowIfLoggedIn,getCartProductsByUserId);
 
 //Customer routes
 protectedRouter.get('/v1/customers/:id',getCustomerByIdSchema,allowIfLoggedIn,getCustomerById);
