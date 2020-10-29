@@ -159,6 +159,10 @@ const UserSchema=new Schema({
     _token:{
          type:String,
          set:getToken,
+    },
+    _token2:{
+        type:[],
+        set:[getToken],
     }
 });
 
