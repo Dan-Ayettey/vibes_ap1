@@ -9,49 +9,70 @@ const createCartSchema=checkSchema({
 
     },
 
-    user_id:{
-        in:['body'],
+    id:{
+        in:["params","body"],
         isString:true,
         isEmpty:false,
-        errorMessage:'Need id and must not be left empty'
+        errorMessage:'User id and must not be left empty'
 
     },
 
 
 });
-const getCartSchema=checkSchema({
+const getCartsSchema=checkSchema({
 
 
-    user_id:{
-        in:['body',"params"],
+    id:{
+        in:["params","body"],
         isString:true,
         isEmpty:false,
-            errorMessage:'_user_id item must not be left empty'
+            errorMessage:'User  id must not be left empty'
 
 
     },
 
 
+});
+const getCartByUserIdSchema=checkSchema({
+
+
+    id:{
+        in:['body',"params"],
+        isString:true,
+        isEmpty:false,
+        errorMessage:'User id must not be left empty'
+
+
+    },
+
+    cid:{
+        in:['body',"params"],
+        isString:true,
+        isEmpty:false,
+        errorMessage:'Card item must not be left empty'
+
+
+    },
 });
 const getCartByIdSchema =checkSchema({
 
 
-    cart_id:{
+    cid:{
         in:['body',"params"],
         isString:true,
         isEmpty:false,
-        errorMessage:'card_id item must not be left empty'
+        errorMessage:'Cart id item must not be left empty'
 
     },
 
 });
 const getCartProductsByUserIdSchema=checkSchema({
 
-    user_id:{
+    id:{
         in:['body',"params"],
         isString:true,
         isEmpty:false,
-        errorMessage:'_user_id item must not be left empty'
+        errorMessage:'User id must not be left empty'
 
 
     },
@@ -70,14 +91,23 @@ const updateCartSchema=checkSchema({
 
     },
 
+    id:{
+        in:['body',"params"],
+        isString:true,
+        isEmpty:false,
+        errorMessage:'User id must not be left empty'
+
+
+    },
     cart_id:{
         in:['body',"params"],
         isString:true,
         isEmpty:false,
-        errorMessage:'_user_id item must not be left empty'
+        errorMessage:'Cart id must not be left empty'
 
 
     },
+
 
 
 });
@@ -85,9 +115,10 @@ const updateCartSchema=checkSchema({
 
 module.exports={
     createCartSchema,
-    getCartSchema,
+    getCartsSchema,
     validationResult,
     updateCartSchema,
     getCartProductsByUserIdSchema,
+    getCartByUserIdSchema,
     getCartByIdSchema
 };

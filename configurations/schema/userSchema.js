@@ -1,7 +1,7 @@
 const {checkSchema,validationResult}=require('express-validator');
 const schemaUpdate=checkSchema({
     id:{
-        in:['body'],
+        in:['body','params'],
         isEmpty:false,
         isString:true,
         exists:true,
@@ -20,7 +20,7 @@ const getCustomerByIdSchema=checkSchema({
     }});
 const schemaGet=checkSchema({
     id:{
-        in:['body'],
+        in:["params","body"],
         isEmpty:false,
         isString:true,
         exists:true,
@@ -29,9 +29,18 @@ const schemaGet=checkSchema({
 
     }
 });
+const schemaVerify=checkSchema({
+    id:{
+        in:["params","body"],
+        isEmpty:false,
+        isString:true,
+        exists:true,
+        errorMessage:'User is needed'
+    },
+});
 const schemaRenewPassword=checkSchema({
     id:{
-        in:['body'],
+        in:["params","body"],
         isEmpty:false,
         isString:true,
         exists:true,
@@ -51,7 +60,7 @@ const schemaRenewPassword=checkSchema({
 });
 const  schemaRenewSecretMessage=checkSchema({
     id:{
-        in:['body'],
+        in:["params","body"],
         isEmpty:false,
         isString:true,
         exists:true,
@@ -60,7 +69,7 @@ const  schemaRenewSecretMessage=checkSchema({
 
     },
     secretMessage:{
-        in:['body'],
+        in:["params","body"],
         isEmpty:false,
         isString:true,
         exists:true,
@@ -71,7 +80,7 @@ const  schemaRenewSecretMessage=checkSchema({
 });
 const schemaDelete=checkSchema({
     id:{
-        in:['body'],
+        in:["params","body"],
         isEmpty:false,
         isString:true,
         exists:true,
@@ -218,5 +227,6 @@ module.exports={
     schemaActivate,
     schemaGet,
     getCustomerByIdSchema,
+    schemaVerify,
     validationResult
 };

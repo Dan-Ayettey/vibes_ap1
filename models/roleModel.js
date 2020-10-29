@@ -14,6 +14,7 @@ const roleModel = (function() {
         .extend("basic")
         .extend("supervisor")
         .updateAny("profile")
+        .readAny("profile")
         .deleteAny("profile");
 
     return access;

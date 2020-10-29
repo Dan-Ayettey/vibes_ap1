@@ -7,6 +7,9 @@ const cartSchema=new mongoose.Schema({
       type:String,
       required:[true, 'user id is required']
   },
+    _links:{
+      type:[]
+    },
   items:{
       type:Array,
       required:[true, 'items are required']

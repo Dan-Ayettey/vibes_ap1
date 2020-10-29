@@ -121,7 +121,7 @@ const grantAuthenticationWithAToken=async function (request){
             const isAvailable=isValidPassword(password,user.password) || telephoneNumber === user.telephoneNumber &&
                 email===user.email && user.isActive;
                 if(isAvailable){
-                    user._token= await jwt.sign({email:user.email,password:password,id:user._id}, process.env.JWT_SECRET, {expiresIn: '1d'});
+                    user._token= await jwt.sign({role:user.role,email:user.email,password:password,id:user._id}, process.env.JWT_SECRET, {expiresIn: '1d'});
                     await user.save();
                     return {user};
                 }else if(user.email === email  && user.isActive===false){
@@ -152,14 +152,14 @@ const authorizeUser=async function (request,response){
     }
 };
 const getUsers=async function (request,response,next){
+
     try {
-         await userModel.find({},(err,users)=>{
-            if(!err){
+         const users=await userModel.find({});
+            if(users){
                 response.status(200).json({users,isAvailable:userModel.isAvailable});
             }else {
-                response.status(401).json({msg:'Unauthorized',...err,isAvailable:userModel.isAvailable});
+                response.status(401).json({msg:'Unauthorized',isAvailable:userModel.isAvailable});
             }
-        });
     }catch (e){
         next({error:e.message,msg:'might be server error'});
        console.log(e.message);
@@ -167,7 +167,6 @@ const getUsers=async function (request,response,next){
 };
 const getUserById=async function (request,response,next){
     const errors=validationResult(request);
-
     if(errors.isEmpty()) {
         const _id=request.body.id ? request.body.id:request.params.id;
         try {
@@ -346,33 +345,24 @@ const renewPasswordById=async function (request,response,next){
     }
 };
 const veryToken=async function (request,  response, next){
-       const  error=validationResult(request);
-    if(error.isEmpty()) {
-        if (request.headers.authorization) {
-            const accessToken = request.headers.authorization.slice(7, 1000);
-            try {
-            const very=await jwt.verify(accessToken, process.env.JWT_SECRET);
+    if (request.headers.authorization) {
+        const accessToken = request.headers.authorization.slice(7, 1000);
+        try {
+            const verify=await jwt.verify(accessToken, process.env.JWT_SECRET);
             // Check if token has expired
-            if (very.exp < Date.now().valueOf() / 1010) {
+            if (verify.exp < Date.now().valueOf() / 1010) {
                 response.status(401).json({error: "JWT token has expired, please login to obtain a new one"});
             } else {
-                const _id = very.id;
-
-                response.locals.loggedInUser = await userModel.findById({_id});
-                 next();
+                response.locals.loggedInUser = verify;
+                next();
             }
-            } catch (e) {
-
-                next({error: e.name, msg: 'might be server error or '+e.message});
-               console.log(e.message);
-            }
-
-        } else {
-            next();
+        } catch (e) {
+            next({error: e.name, msg: 'might be server error or '+e.message});
+            console.log(e.message);
         }
-    }else {
 
-        response.status(400).json(error);
+    } else {
+        next();
     }
 };
 const getCustomerById=async function (request,response,next) {
