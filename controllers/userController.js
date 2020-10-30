@@ -264,13 +264,16 @@ const updateUserById=async function (request,response,next){
     if(errors.isEmpty()) {
         request.body.updated_at=new Date();
         const _id=request.body.id ? request.body.id:request.params.id;
+        delete request.body.id;
+        delete request.email;
+        delete request.password;
         try {
             const user = await userModel.findOne({_id});
             if (user) {
                 if(user.isActive){
-                    request.body.password=request.body.password ? getHashedPassword(request.body.password,8):user.password;
                     const find = await userModel.findByIdAndUpdate({_id},{...request.body});
-                    response.status(200).json({id:find.id,updated_at:find.updated_at, isUpdated: true});
+
+                    response.status(200).json({updated_id:find.id,updated_at:find.updated_at, isUpdated: true});
                 }else {
                     response.status(401).json({msg: 'Unauthorized', isUpdated: false});
                 }

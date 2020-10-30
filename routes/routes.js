@@ -8,7 +8,7 @@ const {deleteCartProductById,createCartProduct,getCartProducts,
     getCartProductById,updateCartProductById,getCartProductsByUserId}=require('../controllers/cartController');
 const {getCartSchema,createCartSchema,updateCartSchema,getCartByIdSchema,getCartProductsByUserIdSchema}=require('../configurations/schema/cartSchema');
 const {withJWTAuthMiddleware}=require('express-kun');
-const {schemaUpdate,schemaVerify,getCustomerByIdSchema,schemaRenewPassword,schemaCreate,schemaGet,schemaAuth,schemaActivate,schemaDelete,schemaRenewSecretMessage}
+const {schemaUpdate,getCustomerByIdSchema,schemaRenewPassword,schemaCreate,schemaGet,schemaAuth,schemaActivate,schemaDelete,schemaRenewSecretMessage}
 = require("../configurations/schema/userSchema");
 const router = express.Router();
 const protectedRouter=withJWTAuthMiddleware(router,process.env.JWT_SECRET);
@@ -43,8 +43,9 @@ protectedRouter.get('/v1/admins/managed-user/',allowIfLoggedIn,grantAccess('read
 protectedRouter.get('/v1/admins/managed-user/:id',schemaGet,allowIfLoggedIn,grantAccess('readAny','profile'),getUserById);
 protectedRouter.delete('/v1/admins/managed-user/:id',schemaDelete,allowIfLoggedIn,grantAccess('deleteAny','profile'),deleteUserById);
 protectedRouter.put('/v1/admins/managed-user/:id',schemaDelete,allowIfLoggedIn,grantAccess('updateAny','profile'),deleteUserById);
-protectedRouter.delete('/v1/admins/managed-carted-user//:id',getCartByIdSchema,allowIfLoggedIn,grantAccess('deleteAny','profile'),deleteCartProductById);
-
+protectedRouter.delete('/v1/admins/managed-carted-user/:id',getCartByIdSchema,allowIfLoggedIn,grantAccess('deleteAny','profile'),deleteCartProductById);
+protectedRouter.put('/v1/admins/managed-user/deactivated-account/:id',deactivateUserById);
+protectedRouter.post( '/v1/admins/managed-user/activated-account',activateUser);
 
 
 module.exports = router;
