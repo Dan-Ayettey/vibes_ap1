@@ -1,9 +1,8 @@
 //dependencies
 const express = require('express');
-const {getCustomerById} = require("../controllers/userController");
 const {grantAccess,allowIfLoggedIn}=require('../configurations/auth/grantAccess');
 const {createUser,getUserById,getUsers,authorizeUser, deactivateUserById, activateUser, updateUserById,deleteUserById,
-    renewPasswordById,veryToken,renewSecretById}= require("../controllers/userController");
+    renewPasswordById,veryToken,renewSecretById,getCustomerById}= require("../controllers/userController");
 const {apiVer } = require("../controllers/versionController");
 const {deleteCartProductById,createCartProduct,getCartProducts,
     getCartProductById,updateCartProductById,getCartProductsByUserId}=require('../controllers/cartController');
