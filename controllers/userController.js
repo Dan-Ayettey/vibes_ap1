@@ -156,7 +156,7 @@ const getUsers=async function (request,response,next){
     try {
          const users=await userModel.find({});
             if(users){
-                response.status(200).json({users,isAvailable:userModel.isAvailable});
+                response.status(200).json({numberOfRegisters:users.length,users,isAvailable:userModel.isAvailable});
             }else {
                 response.status(401).json({msg:'Unauthorized',isAvailable:userModel.isAvailable});
             }

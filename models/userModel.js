@@ -39,7 +39,9 @@ function getDateDeactivated(date){
 function getDateActivated(date){
     return  date;
 }
-
+function getNumberOfRegisters(number){
+    return  number;
+}
 //getStripe customer id
 const getCustomerId = function(id) {
     return id;
@@ -92,6 +94,9 @@ const UserSchema=new Schema({
         set:getHashedPassword
     },
     firstName:{
+        type:String,
+    },
+    avatar:{
         type:String,
     },
     tagName:{
@@ -163,7 +168,7 @@ const UserSchema=new Schema({
     _token2:{
         type:[],
         set:[getToken],
-    }
+    },
 });
 
 //module

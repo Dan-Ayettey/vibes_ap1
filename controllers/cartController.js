@@ -154,7 +154,6 @@ const updateCartProductById=async function (request,response,next) {
 
     if(errors.isEmpty()){
         try {
-            console.log(request.body)
             const cart=await cartModel.findOne({_id});
             if(cart){
             cart.items=request.body.items;
