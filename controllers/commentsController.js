@@ -78,7 +78,7 @@ const getCommentsByUserId=async function (request,response,next) {
 
             const comments=await commentModel.findById({_id});
             if(comments){
-                response.status(200).json(comments);
+                response.status(200).json({numberOfComments:comments.length,comments});
             }else{
                 response.status(401).json({msg: 'Unauthorized', isAvailable: comments.isAvailable});
             }

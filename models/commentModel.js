@@ -14,7 +14,7 @@ const Comment=new Schema({
 
     },
     _user_id:{
-        type:[],
+        type: String,
         required:[true, 'user id is needed'],
 
     },

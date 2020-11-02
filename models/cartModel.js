@@ -7,6 +7,29 @@ const cartSchema=new mongoose.Schema({
       type:String,
       required:[true, 'user id is required']
   },
+    customer:{
+        type:Array,
+        required:[true, 'customer details is required']
+    },
+    total:{
+        type:String,
+        required:[true, 'total is required']
+    },
+    carrier:{
+            type:String,
+    },
+    dateFrom:{
+        type:String,
+
+    },
+    dateTo:{
+        type:String,
+
+    },
+    isOnLine:{
+        type:Boolean,
+
+    },
     _links:{
       type:[]
     },

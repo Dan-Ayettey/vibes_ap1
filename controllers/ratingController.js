@@ -78,7 +78,7 @@ const getRatingsByUserId=async function (request,response,next) {
 
             const ratings=await ratingModel.findById({_id});
             if(ratings){
-                response.status(200).json(ratings);
+                response.status(200).json({numberOfRaters:ratings.length,ratings});
             }else{
                 response.status(401).json({msg: 'Unauthorized', isAvailable: ratings.isAvailable});
             }
