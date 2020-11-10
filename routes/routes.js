@@ -10,6 +10,8 @@ const {getCartSchema,createCartSchema,updateCartSchema,getCartByIdSchema,getCart
 const {withJWTAuthMiddleware}=require('express-kun');
 const {schemaUpdate,getCustomerByIdSchema,schemaRenewPassword,schemaCreate,schemaGet,schemaAuth,schemaActivate,schemaDelete,schemaRenewSecretMessage}
 = require("../configurations/schema/userSchema");
+const{createChat,deleteChatById,getChatById,getChats,getChatsByUserId,updateChatById}=require('../controllers/chatController');
+const {createChatSchema,getChatByIdSchema,getChatByUserIdSchema,getChatProductsByUserIdSchema,getChatsSchema,updateChatSchema}=require('../configurations/schema/chatSchema');
 const router = express.Router();
 const protectedRouter=withJWTAuthMiddleware(router,process.env.JWT_SECRET);
 
@@ -34,16 +36,24 @@ protectedRouter.delete('/v1/carts/user-carted/:cid',getCartByIdSchema,allowIfLog
 protectedRouter.get('/v1/carts/user-carted/:cid',getCartByIdSchema,allowIfLoggedIn,getCartProductById);
 protectedRouter.put('/v1/carts/user-carted/:cid',updateCartSchema,allowIfLoggedIn,updateCartProductById);
 protectedRouter.get('/v1/carts/users/:id',getCartProductsByUserIdSchema,allowIfLoggedIn,getCartProductsByUserId);
+//chat routes
+router.post('/v1/chats/users/:id',createChatSchema,createChat);
+protectedRouter.delete('/v1/chats/user-chatted/:cid',getChatByIdSchema,allowIfLoggedIn,deleteChatById);
+protectedRouter.get('/v1/chats/user-chatted/:cid',getChatByIdSchema,allowIfLoggedIn,getChatById);
+protectedRouter.put('/v1/chats/user-chatted/:cid',updateChatSchema,allowIfLoggedIn,updateChatById);
+protectedRouter.get('/v1/chats/users/:id',getChatProductsByUserIdSchema,allowIfLoggedIn,getChatsByUserId);
 
 //Customer routes
 protectedRouter.get('/v1/customers/:id',getCustomerByIdSchema,allowIfLoggedIn,getCustomerById);
 //Administrator role
-protectedRouter.get('/v1/admins/managed-cart/',getCartProductsByUserIdSchema,allowIfLoggedIn,grantAccess('readAny','profile'),getCartProducts);
+protectedRouter.get('/v1/admins/managed-chat/',getCartProductsByUserIdSchema,allowIfLoggedIn,grantAccess('readAny','profile'),getCartProducts);
+protectedRouter.get('/v1/admins/managed-cart/',getCartProductsByUserIdSchema,allowIfLoggedIn,grantAccess('readAny','profile'),getChats);
 protectedRouter.get('/v1/admins/managed-user/',allowIfLoggedIn,grantAccess('readAny','profile'),getUsers);
 protectedRouter.get('/v1/admins/managed-user/:id',schemaGet,allowIfLoggedIn,grantAccess('readAny','profile'),getUserById);
 protectedRouter.delete('/v1/admins/managed-user/:id',schemaDelete,allowIfLoggedIn,grantAccess('deleteAny','profile'),deleteUserById);
 protectedRouter.put('/v1/admins/managed-user/:id',schemaDelete,allowIfLoggedIn,grantAccess('updateAny','profile'),deleteUserById);
 protectedRouter.delete('/v1/admins/managed-carted-user/:id',getCartByIdSchema,allowIfLoggedIn,grantAccess('deleteAny','profile'),deleteCartProductById);
+protectedRouter.delete('/v1/admins/managed-chatted-user/:id',getCartByIdSchema,allowIfLoggedIn,grantAccess('deleteAny','profile'),deleteChatById);
 protectedRouter.put('/v1/admins/managed-user/deactivated-account/:id',deactivateUserById);
 protectedRouter.post( '/v1/admins/managed-user/activated-account',activateUser);
 

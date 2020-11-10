@@ -98,6 +98,38 @@ GET	/api/v1 get api version.
  ### `Basic role. Type	Resource	Description`
  
 ##### `POST	/v1/users/users,	creat users.`
+
+#### `Sample request Swift`
+ ```  
+let data:[String:Any]:
+  func createUser(data:Any) {
+            let jsonData = try? JSONSerialization.data(withJSONObject: data)
+                  
+                          // create post request
+                          let url = URL(string: "http://13.48.136.153/v1/users")! //PUT Your URL
+                          var req = URLRequest(url: url)
+                          req.httpMethod = "POST"
+                          req.setValue("\(String(describing: jsonData?.count))", forHTTPHeaderField: "Content-Length")
+                          req.setValue("application/json", forHTTPHeaderField: "Content-Type")
+                          // insert json data to the request
+                          req.httpBody = jsonData
+                  
+                          let task = URLSession.shared.dataTask(with: req) { data, response, error in
+                              guard let data = data, error == nil else {
+                                  print(error?.localizedDescription ?? "No data")
+                                  return
+                              }
+                              let responseJSON = try? JSONSerialization.jsonObject(with: data, options: [])
+                              if let responseJSON = responseJSON as? [String: Any] {
+                                  print(responseJSON) //Code after Successfull POST Request
+                              }
+                          }
+                  
+                          task.resume()
+            
+        }
+ ```
+
 #####  `POST	/v1/users/auth,	  authenticate user.`
 #####  `GET 	/v1/users/id,	    get user by id.`
 #####  `PUT	  /v1/users/id,	    update user by id.`
