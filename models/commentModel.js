@@ -8,6 +8,7 @@ function getDateUpdated(date){
     return  date;
 }
 const Comment=new Schema({
+
     comments:{
         type:[],
         required:[true, 'comments are needed'],
@@ -27,6 +28,9 @@ const Comment=new Schema({
         set:getDateUpdated,
     }
     ,isAvailable:{
+        type:Boolean,
+    },
+    isActive:{
         type:Boolean,
     }
 });

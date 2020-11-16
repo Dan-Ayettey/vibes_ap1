@@ -3,7 +3,7 @@
  */
 const {checkSchema,validationResult}=require('express-validator');
 const createFileSchema=checkSchema({
-    file:{
+    data:{
         in:['body'],
         isArray:true,
         isEmpty:false,

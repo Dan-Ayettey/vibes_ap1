@@ -1,6 +1,6 @@
 /*
-dependencies
-*/
+ dependencies
+ */
 'use strict';
 //instances
 const mongoose=require('mongoose');
@@ -10,6 +10,7 @@ const Schema=mongoose.Schema;
 function getIsAvailable(isAvailable){
     return  isAvailable;
 }
+
 // IsAvailable constructor
 function getIsActive(isActive){
     return  isActive;
@@ -39,9 +40,7 @@ function getDateDeactivated(date){
 function getDateActivated(date){
     return  date;
 }
-function getNumberOfRegisters(number){
-    return  number;
-}
+
 //getStripe customer id
 const getCustomerId = function(id) {
     return id;
@@ -76,16 +75,17 @@ const CustomerModelSchema=new Schema({
 
 });
 const UserSchema=new Schema({
-     _customer_id:{
-         type:String,
-         unique: true,
-         immutable:true,
-         set:getCustomerId,
-     },
-    email:{
+    _customer_id:{
         type:String,
         unique: true,
         immutable:true,
+        set:getCustomerId,
+    },
+
+    email:{
+        type:String,
+        unique: true,
+        immutable:false,
         required:[true, 'Email field is needed']
     },
     password:{
@@ -93,6 +93,7 @@ const UserSchema=new Schema({
         required:[true, 'Password field is needed'],
         set:getHashedPassword
     },
+
     firstName:{
         type:String,
     },
@@ -104,7 +105,7 @@ const UserSchema=new Schema({
     },
     created_at:{
         type:String,
-         set:getDateCreated
+        set:getDateCreated
     } ,
     updated_at: {
         type:String,
@@ -144,7 +145,7 @@ const UserSchema=new Schema({
 
     _links:[],
     isActive:{
-         type:Boolean,
+        type:Boolean,
         set:getIsActive
     },
     isAvailable:{
@@ -162,12 +163,12 @@ const UserSchema=new Schema({
         enum: ["basic", "supervisor", "admin"]
     },
     _token:{
-         type:String,
-         set:getToken,
+        type:String,
+        set:getToken,
     },
     _token2:{
         type:[],
-        set:[getToken],
+        set:getToken,
     },
 });
 

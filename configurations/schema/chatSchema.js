@@ -10,68 +10,39 @@ const createChatSchema=checkSchema({
     },
     html: {
         in: ["body"],
-        
-    },
-    user_id: {
-        in: ["body","params"],
-        isString: String,
-        isEmpty:false,
-        errorMessage:  'user id is needed',
 
     },
+
     sent_at: {
         in: ["body"],
     },
     fromUser: {
         isEmpty:false,
+        isEmail:true,
         exists:true,
         isString:true,
-        errorMessage:'From user is needed',
+        errorMessage:'From user is needed and must be email',
 
     },
     toUser: {
         isEmpty:false,
+        isEmail:true,
         exists:true,
         isString:true,
-        errorMessage:'To user is needed',
+        errorMessage:'To user is needed and must be email',
 
     },
 
 
 });
 
-const getChatsSchema=checkSchema({
-
-
-    id:{
-        in:["params","body"],
-        isString:true,
-        isEmpty:false,
-            errorMessage:'User  id must not be left empty'
-
-
-    },
-
-
-});
 const getChatByUserIdSchema=checkSchema({
 
-
-    id:{
-        in:['body',"params"],
+    fromUser:{
+        in:['params','body'],
         isString:true,
         isEmpty:false,
-        errorMessage:'User id must not be left empty'
-
-
-    },
-
-    cid:{
-        in:['body',"params"],
-        isString:true,
-        isEmpty:false,
-        errorMessage:'Card id must not be left empty'
-
+        errorMessage:'From user email is needed and must not be left empty'
 
     },
 });
@@ -87,17 +58,7 @@ const getChatByIdSchema =checkSchema({
     },
 
 });
-const getChatProductsByUserIdSchema=checkSchema({
 
-    id:{
-        in:['body',"params"],
-        isString:true,
-        isEmpty:false,
-        errorMessage:'User id must not be left empty'
-
-
-    },
-});
 const updateChatSchema=checkSchema({
     items:{
         in:['body'],
@@ -125,11 +86,6 @@ const updateChatSchema=checkSchema({
 
 
 module.exports={
-    createChatSchema,
-    getChatsSchema,
-    validationResult,
-    updateChatSchema,
-    getChatProductsByUserIdSchema,
-    getChatByUserIdSchema,
-    getChatByIdSchema
+    createChatSchema,getChatByIdSchema,getChatByUserIdSchema,updateChatSchema,
+    validationResult
 };

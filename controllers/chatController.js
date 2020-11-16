@@ -1,4 +1,6 @@
 //instances
+const {contactModel} =require('../models/contactModel');
+
 const {chatModel}=require('../models/chatModel');
 const {validationResult} = require("../configurations/schema/chatSchema");
 
@@ -7,52 +9,27 @@ const createChat=async function (request,response,next) {
 
     const errors=validationResult(request);
     if(errors.isEmpty()){
-        request.body._links = [
-
-            {
-                rel: 'self', href: '/v1/chats/users/:id', action: 'POST',
-                types: ["application/x-www-form-urlencoded"], authorization: 'token'
-            },
-            {
-                rel: 'self', href: '/v1/chats/:cid/managed-chats-user/:id', action: 'PUT',
-                types: ["application/x-www-form-urlencoded"], authorization: 'token'
-            },
-            {
-                rel: 'self', href: '/v1/chats/:id', action: 'GET',
-                types: ["application/x-www-form-urlencoded"], authorization: 'token'
-            },
-            {
-                rel: 'self', href: '/v1/chats/users/:id', action: 'GET',
-                types: ["application/x-www-form-urlencoded"], authorization: 'token'
-            },
-            {
-                rel: 'self', href: '/v1/chats/:cid/managed-chatted-user/:id', action: 'DELETE',
-                types: ["application/x-www-form-urlencoded"], authorization: 'token'
-            },
-            {
-                rel: 'self', href: '/v1/admins/managed-chatted-user/:id', action: 'PUT',
-                types: ["application/x-www-form-urlencoded"], authorization: 'token'
-            },
-            {
-                rel: 'self', href: '/v1/admins/managed-chatted-users/:id', action: 'DELETE',
-                types: ["application/x-www-form-urlencoded"], authorization: 'token'
-            },
-        ];
 
         try {
-
-            request.body._user_id=request.body.id? request.body.id:request.params.id;
             request.body.sent_at=new Date();
-            const cart = await chatModel.create(request.body);
-            console.log("Hold");
-            if(cart){
-                response.status(201).json({
-                    cart,
-                    isCreated: true,
-                });
+            request.body.isActive=true;
+            const email=request.body.toUser;
+            const telephoneNumber=request.body.telephoneNumber;
+            const chat = await chatModel.create(request.body);
+            const contact = await contactModel.findOne({email} || {telephoneNumber});
+            if(contact){
+                if(chat){
+                    response.status(201).json({
+                        chat,
+                        isCreated: true,
+                    });
+                }else {
+                    response.status(401).json({msg: 'Unauthorized',isCreated:false});
+                }
             }else {
-                response.status(401).json({msg: 'Unauthorized',isCreated:false});
+         response.status(401).json({msg: 'Unauthorized, can not find the receiver in your contact. Add receiver to contact',isCreated:false});
             }
+
 
         }catch (e) {
             next(e.message);
@@ -65,9 +42,9 @@ const createChat=async function (request,response,next) {
 const getChats=async function (request,response,next) {
 
     try {
-        const chat=await chatModel.find({});
-        if(chat){
-            response.status(200).json(chat);
+        const chats=await chatModel.find({});
+        if(chats){
+            response.status(200).json({chats});
         }
         else {
             response.status(401).json({msg: 'Unauthorized'});
@@ -78,14 +55,14 @@ const getChats=async function (request,response,next) {
     }
 };
 const getChatsByUserId=async function (request,response,next) {
+    const fromUser=request.body.fromUser ?request.body.fromUser:request.params.id;
     const errors =validationResult(request);
 
     if(errors.isEmpty()){
         try {
-            const _user_id=request.body.id ? request.body.id:request.params.id;
-            const chat=await chatModel.find({_user_id});
-            if(chat){
-                response.status(200).json(chat);
+            const chats=await chatModel.find({fromUser});
+            if(chats){
+                response.status(200).json({chats});
             }
             else {
                 response.status(401).json({msg: 'Unauthorized'});
@@ -105,18 +82,17 @@ const getChatsByUserId=async function (request,response,next) {
 const getChatById=async function (request,response,next) {
     const _id=request.body.cid ? request.body.cid:request.params.cid;
     const errors=validationResult(request);
-    
+
 
     if(errors.isEmpty()){
         try {
             const chat=await chatModel.findOne({_id});
-            console.log(chat);
             if(chat){
                 const id=request.body.id ? request.id :request.params.id;
                 if(id===chat._user_id){
-                    response.status(200).json(chat);
+                    response.status(200).json({chat});
                 }else {
-                    response.status(200).json(chat);
+                    response.status(200).json({chat});
                 }
 
             }
@@ -161,11 +137,10 @@ const updateChatById=async function (request,response,next) {
 
     if(errors.isEmpty()){
         try {
-            const chat=await chatModel.findOne({_id});
-            if(chat){
-                chat.text=request.body.text;
-                await chat.save();
-                response.status(200).json(chat);
+            const updated=await chatModel.findOneAndUpdate({_id},request.body);
+            if(updated){
+
+                response.status(200).json({updated_at:updated.edited_at, isUpdated: true});
             } else {
                 response.status(401).json({msg: 'Unauthorized',isUpdated:false});
             }

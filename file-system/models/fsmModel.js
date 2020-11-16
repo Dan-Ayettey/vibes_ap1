@@ -2,35 +2,35 @@
  * Created by ictte on 09/11/2020.
  */
 const fs=require('fs');
-const buffers=new Buffer(1024);
-const writeFile=function (path,flag,flavorData) {
-  fs.open(path,flag,function (err,dataPath) {
-      if(err){
-          return err.message
-      }else {
-          fs.writeFile(dataPath,flavorData,function (error) {
 
-          if(error){
-           return error
-          }else {
+let response=function(error,data){
+   return {error,data}
+};
+const buffers=new Buffer.alloc(1024);
+const writeFile=function (path,flag,fileName,flavorData) {
+    var x=[]
+   fs.readFile(process.cwd()+'/file-system/folders/CV-DanAyettey_drift_Network.pdf',(err,data)=> {
+       x.push(err);
+       x.push(data)
+        if (err) {
+            return err;
+        } else {
+        const buffer = new Buffer.from(data);
+        fs.open(path + fileName, flag, response);
+        if (response.error) {
+            return response.error;
+        } else {
+            fs.writeFile(path + fileName, buffer, 'binary', response);
+            if (response.error) {
+                return response.error;
+            } else {
+                return response.data;
+            }
+        }
+    }
+    });
 
-             fs.readFile(dataPath,function (error,data) {
-
-               if(error){
-               return error
-             }else{
-                   return data;
-             }
-
-
-             })
-
-          }
-
-          });
-
-      }
-  })
+  console.log(x)
 };
 
 const getFileStat=function (path) {
@@ -101,17 +101,24 @@ const updateFile=function (path) {
     })
 };
 
-const makeDir=function (path) {
-    fs.readdir(path,function (error,dir) {
-        fs.mkdir(dir,function (err,file) {
-            if(err){
-                return err.message
-            }else {
-                return file;
-            }
-        })
-    });
+const makeDir=function (path,name) {
+    fs.readdir(path, function (error, dir) {
+        if (error) {
+            return error.message
+        } else {
+            fs.mkdir(path+'/'+name, function (err, file) {
+                if (err) {
+                    return err.message
+                } else {
+                    return file;
+                }
 
+            })
+        }
+
+
+
+    });
 };
 
 const deleteDir=function (path) {

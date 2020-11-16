@@ -6,6 +6,45 @@ const createComment=async function (request,response,next) {
     const errors=validationResult(request)
     if(errors.isEmpty()){
         request.body.id=request.body.id ? request.body.id:request.params.id;
+        request.body._links = [
+
+            {
+                rel: 'self', href: '/v1/comments/user/:id', action: 'POST',
+                types: ["application/x-www-form-urlencoded"], authorization: 'token'
+            },
+            {
+                rel: 'self', href: '/v1/comments/:cid/managed-commented-user/:id', action: 'PUT',
+                types: ["application/x-www-form-urlencoded"], authorization: 'token'
+            },
+            {
+                rel: 'self', href: '/v1/comments/:id', action: 'GET',
+                types: ["application/x-www-form-urlencoded"], authorization: 'token'
+            },
+            {
+                rel: 'self', href: '/v1/comments/user/:id', action: 'GET',
+                types: ["application/x-www-form-urlencoded"], authorization: 'token'
+            },
+            {
+                rel: 'self', href: '/v1/comments/:id/activate-contact', action: 'PUT',
+                types: ["application/x-www-form-urlencoded"], authorization: 'token'
+            },
+            {
+                rel: 'self', href: '/v1/comments/:id/deactivate-contact', action: 'PUT',
+                types: ["application/x-www-form-urlencoded"], authorization: 'token'
+            },
+            {
+                rel: 'self', href: '/v1/comments/:cid/managed-commented-user/:id', action: 'DELETE',
+                types: ["application/x-www-form-urlencoded"], authorization: 'token'
+            },
+            {
+                rel: 'self', href: '/v1/admins/managed-commented-user/:id', action: 'PUT',
+                types: ["application/x-www-form-urlencoded"], authorization: 'token'
+            },
+            {
+                rel: 'self', href: '/v1/admins/managed-commented-user/:id', action: 'DELETE',
+                types: ["application/x-www-form-urlencoded"], authorization: 'token'
+            },
+        ];
         try{
             request.body.created_at=new Date();
             request.body.isAvailable=true;

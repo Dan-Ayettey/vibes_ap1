@@ -19,20 +19,7 @@ const createCartSchema=checkSchema({
 
 
 });
-const getCartsSchema=checkSchema({
 
-
-    id:{
-        in:["params","body"],
-        isString:true,
-        isEmpty:false,
-            errorMessage:'User  id must not be left empty'
-
-
-    },
-
-
-});
 const getCartByUserIdSchema=checkSchema({
 
 
@@ -105,7 +92,6 @@ const updateCartSchema=checkSchema({
 
 module.exports={
     createCartSchema,
-    getCartsSchema,
     validationResult,
     updateCartSchema,
     getCartProductsByUserIdSchema,

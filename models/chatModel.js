@@ -11,15 +11,13 @@ function getDateUpdated(date){
 function getText(text){
     return  text;
 }
-function getLinks(url){
-    return  url;
-}
+
 function getFromUser(text){
     return  text;
 }
 const Chat=new Schema({
     text:{
-        type:[],
+        type:String,
         required:[true, 'Message from  are needed'],
         set:getText
     },
@@ -27,22 +25,18 @@ const Chat=new Schema({
         type:[],
         set:getText
     },
-    _user_id:{
-        type: String,
-        required:[true, 'user id is needed'],
 
-    },
     sent_at:{
         type: String,
     },
     fromUser:{
-        type: {},
+        type: String,
         required:[true, 'from user is needed'],
         set:getFromUser
 
     },
     toUser:{
-        type: {},
+        type: String,
         required:[true, 'from user is needed'],
         set:getFromUser
 
@@ -53,10 +47,7 @@ const Chat=new Schema({
     NumberOfReaders:{
       type:Number
     },
-    _links:{
-        type:[],
-        set:getLinks
-    },
+
     edited_at:{
         type:String,
         set:getDateUpdated,
@@ -64,10 +55,15 @@ const Chat=new Schema({
     isAvailable:{
         type:Boolean,
     },
+    created_at:{
+        type:String,
+        set:getDateCreated
+    } ,
     mentions:{
         type:[],
         set:getText
     },
+
     issues:{
         type:[]
     },

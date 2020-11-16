@@ -41,7 +41,7 @@ const createCartProduct=async function (request,response,next) {
         try {
 
             request.body._user_id=request.body.id? request.body.id:request.params.id;
-            const cart = await cartModel.create(request.body);
+            const cart = await cartModel.create(...request.body);
             if(cart){
                 response.status(201).json({
                     cart,

@@ -2,6 +2,7 @@
 const express = require('express');
 const logger = require('morgan');
 const usersRouter = require('./routes/routes');
+const fileRouter=require('./file-system/routes/routes');
 const cors=require('cors');
 const queue=require('express-queue');
 const app = express();
@@ -24,6 +25,7 @@ app.use((request,response,next)=>{
 });
 
 app.use('/',usersRouter);
+app.use('/',fileRouter);
 app.use(error404Handler);
 app.use(error500Handler);
 module.exports = app;

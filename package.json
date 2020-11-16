@@ -25,6 +25,7 @@
     "mongose": "0.0.2-security",
     "morgan": "~1.9.1",
     "nodejs-fetch": "^1.0.0",
+    "pdfkit": "^0.11.0",
     "pg": "^8.4.2",
     "pg-hstore": "^2.3.3",
     "pgtools": "^0.3.0",

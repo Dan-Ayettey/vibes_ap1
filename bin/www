@@ -5,7 +5,7 @@
  */
 const mongoose=require('mongoose');
 const app = require('../app');
-const  fileApp = require('../file-syetem/fileApp');
+const  fileApp = require('../file-system/fileApp');
 const debug = require('debug')('api:server');
 const http = require('http');
 
@@ -31,12 +31,14 @@ const fileServer = http.createServer(fileApp);
  * Listen on provided port, on all network interfaces.
  */
 
-mongoose.connect('mongodb://localhost/v1',{useNewUrlParser:true,useUnifiedTopology:true,useCreateIndex:true,useFindAndModify:false},(err) => {
+mongoose.connect('mongodb://localhost/v1',{useNewUrlParser:true,useUnifiedTopology:true,useCreateIndex:true,useFindAndModify:false},(err,db) => {
   if (!err){
     console.log('Successfully Connected in MongoDB');
   } else {
+
     console.log('Syntax Error: ' + err);
   }});
+
 mongoose.Promise=global.Promise;
 mongooseDB=mongoose.connection;
 mongooseDB.on('error',console.error.bind(console,'connection error'));

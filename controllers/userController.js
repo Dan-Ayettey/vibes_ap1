@@ -8,6 +8,7 @@ const {validationResult} = require("../configurations/schema/userSchema");
 const createUser=async function (request,response,next){
  const errors=validationResult(request);
 
+
 if(errors.isEmpty()) {
 
 
@@ -99,7 +100,7 @@ if(errors.isEmpty()) {
                       isCreated: true,
                   });
               }else {
-                  response.status(406).json({msg: 'Does not find any content following the criteria given by the user agent', isAvailable: find.isAvailable, isActive: find.isActive});
+                  response.status(406).json({msg: 'Does not find any content following the criteria given by the user agent', isAvailable: false, isActive: false});
               }
 
             }else {
@@ -142,7 +143,7 @@ const authorizeUser=async function (request,response){
              if (user.isActive) {
                  response.status(200).json({user,isAuthorized:true});
              }else {
-                 response.status(401).json({msg: 'Unauthorized', isAuthorized: user.isActive});
+                 response.status(401).json({msg: 'Unauthorized', isActive: user.isActive});
              }
          } else {
             response.status(401).json({msg: 'Unauthorized', isAuthorized: false});
@@ -171,8 +172,13 @@ const getUserById=async function (request,response,next){
         const _id=request.body.id ? request.body.id:request.params.id;
         try {
             const user = await userModel.findOne({_id});
-            if (user) {
-                response.status(200).json({user, isAvailable: userModel.isAvailable});
+            if (user){
+                if(user.isActive){
+                    response.status(200).json({user, isAvailable: user.isAvailable});
+                }else {
+                    response.status(401).json({msg: 'Unauthorized',isAvailable: user.isAvailable,isActive: user.isActive});
+                }
+
             } else {
                 response.status(401).json({msg: 'Unauthorized', ...user, isAvailable: userModel.isAvailable});
             }
@@ -192,7 +198,7 @@ const deactivateUserById= async function (request,response,next){
         try {
             const user = await userModel.findOne({_id});
             if(user.id){
-                if (user) {
+                if (user){
                     user.isActive = false;
                     user.deactivated_at=new Date();
                     const save=await user.save();
@@ -203,7 +209,6 @@ const deactivateUserById= async function (request,response,next){
             } else{
                 response.status(403).json({msg: 'Unauthorised to access the resource', isDeactivated:true});
             }
-
         } catch (e) {
             next({error:e._message,msg:'might be server error'});
            console.log(e.message);
@@ -242,12 +247,7 @@ const activateUser= async function (request,response,next){
                 user.isActive=true;
                 user.activated_at=new Date();
                 const save=await user.save();
-                if (save){
-                    response.status(200).json({id:save.id, isActive: save.isActive});
-                }else{
-                    response.status(401).json({error:save.message, isActive: save.isActive});
-                }
-
+                response.status(200).json({id:save.id, isActive: save.isActive});
             } else {
                 response.status(401).json({msg: 'Unauthorized', isActive:  false});
             }
@@ -272,7 +272,6 @@ const updateUserById=async function (request,response,next){
             if (user) {
                 if(user.isActive){
                     const find = await userModel.findByIdAndUpdate({_id},{...request.body});
-
                     response.status(200).json({updated_id:find.id,updated_at:find.updated_at, isUpdated: true});
                 }else {
                     response.status(401).json({msg: 'Unauthorized', isUpdated: false});
