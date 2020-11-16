@@ -45,7 +45,7 @@ protectedRouter.get('/v1/chats/:cid',getChatByIdSchema,allowIfLoggedIn,getChatBy
 protectedRouter.put('/v1/chats/:cid',updateChatSchema,allowIfLoggedIn,updateChatById);
 protectedRouter.get('/v1/chats/received/from',getChatByUserIdSchema,allowIfLoggedIn,getChatsByUserId);
 //contact routes
-router.post('/v1/contacts/user/id',createContactSchema,allowIfLoggedIn,createContact);
+router.post('/v1/contacts/user/:id',createContactSchema,allowIfLoggedIn,createContact);
 protectedRouter.put('/v1/contacts/:cid/deactivated-contact',getContactByIdSchema,allowIfLoggedIn,deactivateContactById);
 protectedRouter.put('/v1/contacts/:cid/activated-contact',getContactByIdSchema,allowIfLoggedIn,activateContactById);
 protectedRouter.get('/v1/contacts/:cid',getContactByIdSchema,allowIfLoggedIn,getContactById);
