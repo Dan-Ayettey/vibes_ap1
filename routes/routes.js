@@ -43,7 +43,7 @@ router.post('/v1/chats',createChatSchema,allowIfLoggedIn,createChat);
 protectedRouter.delete('/v1/chats/:cid',getChatByIdSchema,allowIfLoggedIn,deleteChatById);
 protectedRouter.get('/v1/chats/:cid',getChatByIdSchema,allowIfLoggedIn,getChatById);
 protectedRouter.put('/v1/chats/:cid',updateChatSchema,allowIfLoggedIn,updateChatById);
-protectedRouter.get('/v1/chats/received/from',getChatByUserIdSchema,allowIfLoggedIn,getChatsByUserId);
+protectedRouter.post('/v1/chats/received/from',getChatByUserIdSchema,allowIfLoggedIn,getChatsByUserId);
 //contact routes
 router.post('/v1/contacts/user/:id',createContactSchema,allowIfLoggedIn,createContact);
 protectedRouter.put('/v1/contacts/:cid/deactivated-contact',getContactByIdSchema,allowIfLoggedIn,deactivateContactById);
