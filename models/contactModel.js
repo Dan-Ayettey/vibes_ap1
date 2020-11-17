@@ -32,7 +32,6 @@ const Contact=new Schema({
     },
     email:{
             type:String,
-            unique:true,
             required:[true, 'contact information needed'],
             set:getEmail
 

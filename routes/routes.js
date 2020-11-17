@@ -10,8 +10,8 @@ const {createCartSchema,updateCartSchema,getCartByIdSchema,getCartProductsByUser
 const {withJWTAuthMiddleware}=require('express-kun');
 const {schemaUpdate,getCustomerByIdSchema,schemaRenewPassword,schemaCreate,schemaGet,schemaAuth,schemaActivate,schemaDelete,schemaRenewSecretMessage}
 = require("../configurations/schema/userSchema");
-const{createChat,deleteChatById,getChatById,getChats,getChatsByUserId,updateChatById}=require('../controllers/chatController');
-const {createChatSchema,getChatByIdSchema,getChatByUserIdSchema,updateChatSchema}=require('../configurations/schema/chatSchema');
+const{createChat,getSentChats,deleteChatById,getChatById,getChats,getChatsByUserId,updateChatById}=require('../controllers/chatController');
+const {createChatSchema,getChatByIdSchema,getSentByIdSchema,getChatByUserIdSchema,updateChatSchema}=require('../configurations/schema/chatSchema');
 const{findOneDetailAndAddById,findOneFollowerAndAddById,findOneFollowerAndDeleteById,findOneDetailAndDeleteById,getContactById,getContacts,createContact,updateContactById, deleteContactById,getContactsByUserId,deactivateContactById,activateContactById}=require('../controllers/contactController');
 const {createContactSchema,getFindOneAndUpdateSchema,updateContactByIdSchema,deleteContactsByIdSchema,getContactsByUserIdSchema,getContactByIdSchema}=require('../configurations/schema/contactSchema');
 const router = express.Router();
@@ -44,6 +44,7 @@ protectedRouter.delete('/v1/chats/:cid',getChatByIdSchema,allowIfLoggedIn,delete
 protectedRouter.get('/v1/chats/:cid',getChatByIdSchema,allowIfLoggedIn,getChatById);
 protectedRouter.put('/v1/chats/:cid',updateChatSchema,allowIfLoggedIn,updateChatById);
 protectedRouter.post('/v1/chats/received/from',getChatByUserIdSchema,allowIfLoggedIn,getChatsByUserId);
+protectedRouter.post('/v1/chats/sent/to',getSentByIdSchema,allowIfLoggedIn,getSentChats);
 //contact routes
 router.post('/v1/contacts/user/:id',createContactSchema,allowIfLoggedIn,createContact);
 protectedRouter.put('/v1/contacts/:cid/deactivated-contact',getContactByIdSchema,allowIfLoggedIn,deactivateContactById);
@@ -60,7 +61,7 @@ protectedRouter.get('/v1/contacts/user/:id',getContactsByUserIdSchema,allowIfLog
 protectedRouter.get('/v1/customers/:id',getCustomerByIdSchema,allowIfLoggedIn,getCustomerById);
 //Administrator role
 protectedRouter.get('/v1/admins/managed-chats/',allowIfLoggedIn,grantAccess('readAny','profile'),getChats);
-protectedRouter.get('/v1/admins/managed-chats/',getCartProductsByUserIdSchema,allowIfLoggedIn,grantAccess('readAny','profile'),getCartProducts);
+protectedRouter.get('/v1/admins/managed-chats/',allowIfLoggedIn,grantAccess('readAny','profile'),getCartProducts);
 protectedRouter.get('/v1/admins/managed-contacts/',allowIfLoggedIn,grantAccess('readAny','profile'),getContacts);
 protectedRouter.delete('/v1/admins/managed-contact/:cid',deleteContactsByIdSchema,allowIfLoggedIn,grantAccess('readAny','profile'),deleteContactById);
 protectedRouter.get('/v1/admins/managed-carts/',getCartProductsByUserIdSchema,allowIfLoggedIn,grantAccess('readAny','profile'),getChats);

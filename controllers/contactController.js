@@ -14,7 +14,7 @@ const createContact=async function (request,response,next) {
         request.body._links = [
 
             {
-                rel: 'self', href: '/v1/contacts/user/:id', action: 'POST',
+                rel: 'self', href: '/v1/contacts', action: 'POST',
                 types: ["application/x-www-form-urlencoded"], authorization: 'token'
             },
             {
@@ -91,15 +91,23 @@ const createContact=async function (request,response,next) {
             request.body.created_at=new Date();
             request.body.isAvailable=true;
             request.body.isActive=true;
+            const _user_id=request.body._user_id;
             const email=request.body.email;
+
              const user=await userModel.findOne({email});
              if(user){
-                 const Contacts=await contactModel.create(request.body);
+                 const contacts=await contactModel.find({_user_id});
+                 const isEqual=checkEquality(...contacts.map(data => data.email===email));
 
-                 if(Contacts){
-                     response.status(200).json({Contacts,isCreated:false});
+                 if(isEqual){
+                     response.status(409).json({msg: 'The '+email+' conflict with current state of the target resource', isAvailable:true});
+
                  }else{
-                     response.status(406).json({msg: 'Does not find any content following the criteria given by the user agent', isCreated:false});
+                   let createContact= await contactModel.create(request.body);
+                     if(createContact){
+                         response.status(200).json({createContact,isCreated:createContact.isActive});
+                     }
+
                  }
              }else {
                  response.status(406).json({msg: 'Does not find any content following the criteria given by the user agent.' +
@@ -118,6 +126,9 @@ const createContact=async function (request,response,next) {
 
 };
 
+const checkEquality=function(any){
+    return any
+};
 const getContactById=async function (request,response,next) {
     const errors=validationResult(request);
     if(errors.isEmpty()){

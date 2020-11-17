@@ -166,6 +166,24 @@ const getUsers=async function (request,response,next){
        console.log(e.message);
     }
 };
+const searchUsers=async function (request,response,next) {
+    const errors = validationResult(request);
+    if (errors.isEmpty()) {
+        const  firstName= request.body.find;
+        const  lastName=request.body.find;
+        try{
+            const users = await userModel.find({firstName} || {lastName}  );
+            if (users) {
+                response.status(200).json({numberOfRegisters: users.length, users, isAvailable: userModel.isAvailable});
+            } else {
+                response.status(401).json({msg: 'Unauthorized', isAvailable: userModel.isAvailable});
+            }
+        } catch (e) {
+            next({error: e.message, msg: 'might be server error'});
+            console.log(e.message);
+        }
+    }
+};
 const getUserById=async function (request,response,next){
     const errors=validationResult(request);
     if(errors.isEmpty()) {
@@ -367,6 +385,7 @@ const veryToken=async function (request,  response, next){
         next();
     }
 };
+
 const getCustomerById=async function (request,response,next) {
     const  errors= validationResult(request);
     const _user_id=request.body.id ? request.body.id:request.params.id;
@@ -405,6 +424,7 @@ module.exports={
     getCustomerById,
     activateUser,
     deactivateUserById,
+    searchUsers,
     updateUserById,
     veryToken
 

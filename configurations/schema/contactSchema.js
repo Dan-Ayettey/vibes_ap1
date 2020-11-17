@@ -3,14 +3,15 @@ const {checkSchema,validationResult}=require('express-validator');
 
 const createContactSchema=checkSchema({
     email: {
+        in:['body'],
         isEmpty:false,
         exists:true,
         isEmail:true,
         errorMessage:'contact email is needed',
 
     },
-
     id: {
+        in:['body',"params"],
         isEmpty:false,
         isString:true,
         exists:true,

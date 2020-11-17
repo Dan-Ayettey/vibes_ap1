@@ -46,6 +46,23 @@ const getChatByUserIdSchema=checkSchema({
 
     },
 });
+const getSentByIdSchema=checkSchema({
+
+    fromUser:{
+        in:['body'],
+        isString:true,
+        isEmpty:false,
+        errorMessage:'From user email is needed and must not be left empty'
+
+    },
+    toUser:{
+        in:['body'],
+        isString:true,
+        isEmpty:false,
+        errorMessage:'To user email is needed and must not be left empty'
+
+    },
+});
 const getChatByIdSchema =checkSchema({
 
 
@@ -86,6 +103,6 @@ const updateChatSchema=checkSchema({
 
 
 module.exports={
-    createChatSchema,getChatByIdSchema,getChatByUserIdSchema,updateChatSchema,
+    createChatSchema,getChatByIdSchema,getChatByUserIdSchema,updateChatSchema,getSentByIdSchema,
     validationResult
 };

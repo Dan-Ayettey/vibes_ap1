@@ -1,6 +1,5 @@
 //instances
 const {contactModel} =require('../models/contactModel');
-
 const {chatModel}=require('../models/chatModel');
 const {validationResult} = require("../configurations/schema/chatSchema");
 
@@ -54,15 +53,19 @@ const getChats=async function (request,response,next) {
         console.log(e);
     }
 };
-const getChatsByUserId=async function (request,response,next) {
-    const fromUser=request.body.fromUser ?request.body.fromUser:request.params.id;
+
+const getSentChats=async function (request,response,next) {
+    const fromUser=request.body.fromUser;
+    const toUser=request.body.toUser;
     const errors =validationResult(request);
 
     if(errors.isEmpty()){
         try {
-            const chats=await chatModel.find({fromUser});
-            if(chats){
-                response.status(200).json({chats});
+            const sent=await chatModel.find({});
+            let sentData=[];
+            if(sent){
+                sent.map((data)=>data.fromUser === fromUser && data.toUser===toUser ? sentData.push(data):"");
+                response.status(200).json({numberOfSent:sentData.length,sentData});
             }
             else {
                 response.status(401).json({msg: 'Unauthorized'});
@@ -77,7 +80,35 @@ const getChatsByUserId=async function (request,response,next) {
 
 
 
+};
+const getChatsByUserId=async function (request,response,next) {
+    const fromUser=request.body.fromUser ?request.body.fromUser:request.params.id;
+    const errors =validationResult(request);
 
+    if(errors.isEmpty()){
+        try {
+            const email=request.body.toUser;
+            const telephoneNumber=request.body.telephoneNumber;
+            const contact = await contactModel.findOne({email} || {telephoneNumber});
+            if(contact){
+                const chats=await chatModel.find({fromUser});
+                if(chats){
+                    response.status(200).json({chats});
+                }
+                else {
+                    response.status(401).json({msg: 'Unauthorized'});
+                }
+            }else {
+                response.status(401).json({msg: 'Unauthorized, can not find the chat in your contact. Add receiver to contact',isAvailable:false});
+            }
+
+        }catch (e) {
+            next(e.message);
+            console.log(e);
+        }
+    }else {
+        response.status(401).json(errors);
+    }
 };
 const getChatById=async function (request,response,next) {
     const _id=request.body.cid ? request.body.cid:request.params.cid;
@@ -163,5 +194,6 @@ module.exports={
     createChat,
     getChatsByUserId,
     deleteChatById,
+    getSentChats
 
 };
