@@ -1,13 +1,14 @@
 /**
- * Created by ictte on 09/11/2020.
+ Created by ictte on 09/11/2020.
  */
 const {checkSchema,validationResult}=require('express-validator');
 const createFileSchema=checkSchema({
-    data:{
+    dataUrl:{
         in:['body'],
-        isArray:true,
         isEmpty:false,
-        errorMessage:'Needed file and must not be left empty'
+        isString:true,
+        errorMessage:'Needed dataUrl and must not be left empty',
+
 
 
     },
@@ -20,6 +21,13 @@ const createFileSchema=checkSchema({
 
     },
 
+    fileName:{
+        in:["body"],
+        isString:true,
+        isEmpty:false,
+        errorMessage:'File name must not be left empty'
+
+    },
 
 });
 const getFilesSchema=checkSchema({
@@ -48,19 +56,12 @@ const getFileByUserIdSchema=checkSchema({
 
     },
 
-    cid:{
-        in:['body',"params"],
-        isString:true,
-        isEmpty:false,
-        errorMessage:'Card id must not be left empty'
 
-
-    },
 });
 const getFileByIdSchema =checkSchema({
 
 
-    fid:{
+    id:{
         in:['body',"params"],
         isString:true,
         isEmpty:false,

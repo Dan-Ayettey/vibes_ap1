@@ -2,55 +2,44 @@
  * Created by ictte on 09/11/2020.
  */
 const fs=require('fs');
+const  mongoose=require('mongoose');
+const Schema=mongoose.Schema;
 
-let response=function(error,data){
-   return {error,data}
+let response=function(error){
+   return {error}
 };
 const buffers=new Buffer.alloc(1024);
-const writeFile=function (path,flag,fileName,flavorData) {
-    var x=[]
-   fs.readFile(process.cwd()+'/file-system/folders/CV-DanAyettey_drift_Network.pdf',(err,data)=> {
-       x.push(err);
-       x.push(data)
-        if (err) {
-            return err;
-        } else {
-        const buffer = new Buffer.from(data);
-        fs.open(path + fileName, flag, response);
-        if (response.error) {
-            return response.error;
-        } else {
-            fs.writeFile(path + fileName, buffer, 'binary', response);
-            if (response.error) {
-                return response.error;
-            } else {
-                return response.data;
+const writeFile=function (path,flag,fileName,data) {
+
+            if(fs.existsSync(path + fileName)){
+                return {isExist:true}
+            }else {
+                fs.open(path + fileName,flag, response);
+                const buffer = new Buffer.from(data);
+                fs.writeFile(path + fileName, buffer, 'binary', (data)=>data);
+                return {isCreated:true}
             }
-        }
-    }
-    });
+    };
 
-  console.log(x)
-};
 
-const getFileStat=function (path) {
-    fs.open(path,r,function (error,data) {
-        if(error){
-            return error
-        }else {
-            fs.stat(data, function (error, stat) {
-                if (error) {
-                    return error.message
-                } else {
-                    return stat
 
+
+const getFileStat=function (file) {
+
+       if(fs.existsSync(path + fileName)){
+                const stat= fs.statSync(file);
+                try {
+                    if(!stat.isFile()){
+                        return stat
+                    }else {
+                        return {isExist:stat.isFile(),stat}
+                    }
+
+                }catch (e){
+                    return e
                 }
-
-            })
-        }
-    })
-
-
+            }
+                return false;
 };
 const readFile=function (path) {
     fs.open(path,'r+',function (error,data) {
@@ -83,7 +72,7 @@ const deleteFile=function (path) {
                if(error){
                    return error.message
                }else {
-                   return data;
+                   return true;
                }
 
            })
@@ -96,7 +85,7 @@ const updateFile=function (path) {
         if(err){
             return err.message
         }else {
-            return data;
+            return true;
         }
     })
 };
@@ -133,12 +122,29 @@ const deleteDir=function (path) {
     });
 };
 
+const FileSchema=new Schema({
+    fileStat:{
+        type:Array,
+        required:[true,'The stat information is required ext:[{url:"http://hey.c"}] exec']
+    },
+    link:{
+      type:[],
+    },
+    _user_id:{
+        type:String,
+        required:[true,'User id is needed']
+
+    }
+});
+
+const fileModel=mongoose.model("FileStat",FileSchema);
 module.exports={
     writeFile,
     readFile,
     deleteFile,
     makeDir,
     deleteDir,
+    fileModel,
     getFileStat,
     updateFile,
 };
