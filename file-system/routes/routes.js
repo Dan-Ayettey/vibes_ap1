@@ -23,6 +23,6 @@ const protectedRoute = withJWTAuthMiddleware(router,process.env.JWT_SECRET);
 
 router.all('/',apiVer);
 router.post('/v1/files/user/id',createFileSchema,writeFileController);
-router.post('/v1/files/stat/id',createFileSchema,allowIfLoggedIn,createStat);
+router.post('/v1/files/stat/user/id',createFileSchema,allowIfLoggedIn,createStat);
 protectedRoute.delete('/v1/files/id',createFileSchema,allowIfLoggedIn,deleteFileByUserId);
 module.exports=router;

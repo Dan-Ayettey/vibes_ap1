@@ -4,7 +4,6 @@ const {validationResult}=require('../configurations/fileSchema/fsmSchema.js');
   Created by ictte on 09/11/2020.
  */
 const {makeDir,writeFile,getFileStat,deleteFile,fileModel}=require('../../file-system/models/fsmModel');
-const fs = require('fs');
 const fetch = require('node-fetch');
 function getUrlExtension( url ) {
     return url.split(/[#?]/)[0].split('.').pop().trim();
@@ -85,19 +84,60 @@ const createStat=async function (request,response) {
 
     try {
         const stat = getFileStat(getFile(request));
+
         if (stat) {
 
-            request.body.fileStat = {
-                stat, isFile: stat.isFile(), isDirectory: stat.isDirectory(),
-                isBlockDir: stat.isBlockDevice(),
-                isChar: stat.isCharacterDevice()
-            };
+            request.body._links = [
+
+                {
+                    rel: 'self', href: '/v1/comments/user/:id', action: 'POST',
+                    types: ["application/x-www-form-urlencoded"], authorization: 'token'
+                },
+                {
+                    rel: 'self', href: '/v1/comments/:cid/managed-commented-user/:id', action: 'PUT',
+                    types: ["application/x-www-form-urlencoded"], authorization: 'token'
+                },
+                {
+                    rel: 'self', href: '/v1/comments/:id', action: 'GET',
+                    types: ["application/x-www-form-urlencoded"], authorization: 'token'
+                },
+                {
+                    rel: 'self', href: '/v1/comments/user/:id', action: 'GET',
+                    types: ["application/x-www-form-urlencoded"], authorization: 'token'
+                },
+                {
+                    rel: 'self', href: '/v1/comments/:id/activate-contact', action: 'PUT',
+                    types: ["application/x-www-form-urlencoded"], authorization: 'token'
+                },
+                {
+                    rel: 'self', href: '/v1/comments/:id/deactivate-contact', action: 'PUT',
+                    types: ["application/x-www-form-urlencoded"], authorization: 'token'
+                },
+                {
+                    rel: 'self', href: '/v1/comments/:cid/managed-commented-user/:id', action: 'DELETE',
+                    types: ["application/x-www-form-urlencoded"], authorization: 'token'
+                },
+                {
+                    rel: 'self', href: '/v1/admins/managed-commented-user/:id', action: 'PUT',
+                    types: ["application/x-www-form-urlencoded"], authorization: 'token'
+                },
+                {
+                    rel: 'self', href: '/v1/admins/managed-commented-user/:id', action: 'DELETE',
+                    types: ["application/x-www-form-urlencoded"], authorization: 'token'
+                },
+            ];
+            request.body.fileStat = stat;
             request.body._user_id = request.body.id;
             try {
-                const fModel_2 = await
-                fileModel.create(request.body);
-                response.status(201).json({fModel_2, isCreated: true})
+                if(stat.isExist){
+                    response.status(201).json({stat, isExist: stat.isExist})
+                }else {
+                    const fModel_2 = await fileModel.create(request.body);
+                    response.status(201).json({fModel_2, isCreated: true})
+                }
+
             } catch(e){
+                console.log(e)
                 response.status(400).json({e});
             }
         }
@@ -107,7 +147,7 @@ const createStat=async function (request,response) {
 
 
 
-}
+};
 const readFile=function (path) {
     fs.open(path,'r+',function (error,data) {
         if (error) {
@@ -137,23 +177,12 @@ const readFile=function (path) {
 };
 
 const deleteFileByUserId=async function (request,response) {
-
        try {
-           await  fs.unlink(getFile(request), function (error) {
-
-               if (error) {
-                   response.status(400).json(error.message);
-               } else {
-                   response.status(200).json({isDeleted:true});
-               }
-
-           })
+           let rmFile= await deleteFile(getFile(request));
+           response.status(200).json({rmFile,isDeleted:rmFile});
        }catch (e){
            response.status(400).json(e.message);
        }
-
-
-
 };
 
 const deleteFolderByUserId=function (request,response) {

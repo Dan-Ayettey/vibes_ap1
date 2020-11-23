@@ -16,7 +16,7 @@ const writeFile=function (path,flag,fileName,data) {
             }else {
                 fs.open(path + fileName,flag, response);
                 const buffer = new Buffer.from(data);
-                fs.writeFile(path + fileName, buffer, 'binary', (data)=>data);
+                fs.writeFile(path + fileName, buffer, 'binary', (err)=>err);
                 return {isCreated:true}
             }
     };
@@ -24,13 +24,15 @@ const writeFile=function (path,flag,fileName,data) {
 
 
 
-const getFileStat=function (file) {
+const getFileStat=function (path) {
 
-       if(fs.existsSync(path + fileName)){
-                const stat= fs.statSync(file);
+       if(fs.existsSync(path)){
+                const stat= fs.statSync(path);
                 try {
                     if(!stat.isFile()){
-                        return stat
+                        return {stat,isFile:stat.isFile(), isDirectory: stat.isDirectory(),
+                            isBlockDir: stat.isBlockDevice(),
+                            isChar: stat.isCharacterDevice()}
                     }else {
                         return {isExist:stat.isFile(),stat}
                     }
@@ -62,23 +64,14 @@ const readFile=function (path) {
 };
 
 const deleteFile=function (path) {
-    fs.open(path,r,function (err,data) {
-        if(err){
-            return err.message
-        }else {
+    if(fs.existsSync(path)){
+        fs.unlink(path,(error)=> error)
+        return true
+    }else {
+      return false
+    }
 
-           fs.unlink(data,function (error) {
 
-               if(error){
-                   return error.message
-               }else {
-                   return true;
-               }
-
-           })
-
-        }
-    })
 };
 const updateFile=function (path) {
     fs.open(path,'r+',function (err,data) {
@@ -127,7 +120,7 @@ const FileSchema=new Schema({
         type:Array,
         required:[true,'The stat information is required ext:[{url:"http://hey.c"}] exec']
     },
-    link:{
+    _links:{
       type:[],
     },
     _user_id:{
