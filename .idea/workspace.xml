@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="64579840-0e7c-4e24-85ad-468b41301c9c" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/file-system/controllers/fsmController.js" afterPath="$PROJECT_DIR$/file-system/controllers/fsmController.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/file-system/models/fsmModel.js" afterPath="$PROJECT_DIR$/file-system/models/fsmModel.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/file-system/routes/routes.js" afterPath="$PROJECT_DIR$/file-system/routes/routes.js" />
-    </list>
+    <list default="true" id="64579840-0e7c-4e24-85ad-468b41301c9c" name="Default" comment="" />
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -848,12 +844,12 @@
       <option name="presentableId" value="Default" />
       <updated>1605704483143</updated>
       <workItem from="1605704489711" duration="2932000" />
-      <workItem from="1605710686637" duration="72802000" />
+      <workItem from="1605710686637" duration="72845000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="75734000" />
+    <option name="totallyTimeSpent" value="75777000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="2" width="1934" height="1036" extended-state="0" />
